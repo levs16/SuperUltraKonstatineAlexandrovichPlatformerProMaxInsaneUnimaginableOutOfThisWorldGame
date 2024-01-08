@@ -79,6 +79,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT
 
     def shoot(self):
+        pygame.mixer.music.load('res/Shotgun.mp3')
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play(loops=0)
+
         bullet = bulletP1(self.rect.centerx, self.rect.centery)
         sprites.add(bullet)
         bulletsPlayer1.add(bullet)
@@ -125,6 +129,10 @@ class Player2(pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT
 
     def shoot(self):
+        pygame.mixer.music.load('res/Shotgun.mp3')
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play(loops=0)
+
         bullet = bulletP2(self.rect.centerx, self.rect.centery)
         sprites.add(bullet)
         bulletsPlayer2.add(bullet)
@@ -208,16 +216,10 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_l:
+            if event.key == pygame.K_l and (game != 0 or game != 3 or game != 2 or game != 4):
                 player.shoot()
-                pygame.mixer.music.load('res/Shotgun.mp3')
-                pygame.mixer.music.set_volume(1)
-                pygame.mixer.music.play(loops=-1)
-            if event.key == pygame.K_e:
+            if event.key == pygame.K_e  and (game != 0 or game != 3 or game != 2 or game != 4):
                 player2.shoot()
-                pygame.mixer.music.load('res/Shotgun.mp3')
-                pygame.mixer.music.set_volume(1)
-                pygame.mixer.music.play(loops=-1)
             if event.key == pygame.K_ESCAPE:
                 if game != 0:
                     game = 4
@@ -249,13 +251,6 @@ while run:
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play()
 
-    # playerHit = pygame.sprite.spritecollide(player, enemies, False)
-    '''for k in playerHit:
-        if k:
-            text(window, 'Hit', 100, WHITE, 'Arial',WIDTH//2,HEIGHT//2)
-            pygame.mixer.music.load('amongus.mp3')
-            pygame.mixer.music.set_volume(0.1)
-            pygame.mixer.music.play()'''
 
     # bullet hit counter
     if s1 == 10:
@@ -268,8 +263,8 @@ while run:
         window.blit(mainbg, mainbg_rect)
         text(window, '|Start |N|', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2)
         text(window, '|Exit to desktop |Q|', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
-        text(window, 'Version 0.8.2', 20, LIGHTGRAY, 'Arial', 545, 580)
-        text(window, 'Aboba Games®. All rights reserved©', 20, LIGHTGRAY, 'Arial', 140, 580)
+        text(window, 'Version 0.8.2', 20, LIGHTGRAY, 'Arial', 540, 580)
+        text(window, 'Made by: Lev(levs16), Semen(Sgk4, Yes)', 20, LIGHTGRAY, 'Arial', 185, 580)
         pygame.display.update()
 
     if game == 1:
