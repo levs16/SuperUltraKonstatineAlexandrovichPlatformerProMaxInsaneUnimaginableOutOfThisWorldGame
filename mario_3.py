@@ -1,40 +1,31 @@
-import pygame
 import os
+import random
+import pygame
 import sys
 import argparse
-import math
 
 parser = argparse.ArgumentParser()
 parser.add_argument("map", type=str, nargs="?", default="map.map")
 args = parser.parse_args()
 map_file = args.map
 
+FPS = 60
+
 def load_image(name, color_key=None):
     fullname = os.path.join('data', name)
     try:
-        image = pygame.image.load(fullname)
+        image = pygame.image.load(fullname).convert()
     except pygame.error as message:
         print('Cannot load image:', name)
         raise SystemExit(message)
-    image = image.convert_alpha()
+
     if color_key is not None:
-        if color_key is -1:
+        if color_key == -1:
             color_key = image.get_at((0, 0))
         image.set_colorkey(color_key)
+    else:
+        image = image.convert_alpha()
     return image
-
-pygame.init()
-screen_size = (1920, 1080)
-screen = pygame.display.set_mode(screen_size)
-FPS = 50
-
-tile_images = {
-    'wall': load_image('box.png'),
-    'empty': load_image('grass.png')
-}
-player_image = load_image('mar.png')
-
-tile_width = tile_height = 50
 
 class SpriteGroup(pygame.sprite.Group):
     def __init__(self):
@@ -55,10 +46,17 @@ class Sprite(pygame.sprite.Sprite):
 class Tile(Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(sprite_group)
-        self.image = tile_images[tile_type]
+        self.original_image = tile_images[tile_type]
+        self.image = self.original_image.copy()
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
         self.abs_pos = (self.rect.x, self.rect.y)
+        self.broken = False
+
+    def update_image(self):
+        if self.broken:
+            self.image = tile_images['empty']
+            self.broken = False
 
 class Player(Sprite):
     def __init__(self, pos_x, pos_y):
@@ -85,12 +83,16 @@ class Player(Sprite):
 
     def break_wall(self):
         x, y = self.pos
-        for i in range(-3, 4):
-            for j in range(-3, 4):
+        for i in range(-1, 2):
+            for j in range(-1, 2):
                 target_x = x + i
                 target_y = y + j
                 if 0 <= target_y < max_y and 0 <= target_x < max_x and level_map[target_y][target_x] == '#':
                     level_map[target_y][target_x] = '.'  # Break the wall
+                    for sprite in sprite_group:
+                        if isinstance(sprite, Tile) and sprite.abs_pos == (tile_width * target_x, tile_height * target_y):
+                            sprite.broken = True
+                            sprite.update_image()
 
 class Camera:
     def __init__(self):
@@ -172,10 +174,29 @@ def handle_events():
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse button
             hero.break_wall()  # Break the wall
 
-sprite_group = SpriteGroup()
-hero_group = SpriteGroup()
-clock = pygame.time.Clock()
+pygame.init()
+screen_size = (800, 600)
+screen = pygame.display.set_mode(screen_size)
+FPS = 60
 
+tile_images = {
+    'wall': load_image('box.png'),
+    'empty': load_image('grass.png')
+}
+
+# Define screen here
+screen_size = (1920, 1080)
+screen = pygame.display.set_mode(screen_size)
+
+all_sprites = pygame.sprite.Group()
+hero_group = SpriteGroup()
+sprite_group = SpriteGroup()
+pygame.mouse.set_visible(0)
+
+tile_width = tile_height = 50
+player_image = load_image('mar.png')
+
+clock = pygame.time.Clock()
 start_screen()
 camera = Camera()
 level_map = load_level(map_file)
@@ -188,7 +209,17 @@ while running:
     screen.fill(pygame.Color("black"))
     sprite_group.draw(screen)
     hero_group.draw(screen)
-    pygame.draw.circle(screen, pygame.Color("red"), hero.rect.center, 3 * tile_width, 1)  # Visualize the radius
+
+    # Get the cursor position
+    cursor_pos = pygame.mouse.get_pos()
+
+    # Draw an "X" over the cursor position
+    pygame.draw.line(screen, pygame.Color("red"), (cursor_pos[0] - 10, cursor_pos[1] - 10), (cursor_pos[0] + 10, cursor_pos[1] + 10), 2)
+    pygame.draw.line(screen, pygame.Color("red"), (cursor_pos[0] - 10, cursor_pos[1] + 10), (cursor_pos[0] + 10, cursor_pos[1] - 10), 2)
+
+    # Display FPS in the window title
+    pygame.display.set_caption(f"SuperUltraKonstatineAlexandrovichPlatformerProMaxInsaneUnimaginableOutOfThisWorldGame | v:0.4a | FPS: {int(clock.get_fps())}")
+
     clock.tick(FPS)
     pygame.display.flip()
 
