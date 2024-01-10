@@ -52,15 +52,15 @@ class Player(pygame.sprite.Sprite):
         self.speedx = 5
         self.speedy = 5
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_j]:
             self.speedx = -5
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_l]:
             self.speedx = 5
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_i]:
             self.speedy = -5
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_k]:
             self.speedy = 5
-        if keys[pygame.K_RSHIFT]:
+        if keys[pygame.K_SEMICOLON]:
             self.speedx += 5
             self.speedy += 5
         self.rect.x += self.speedx
@@ -171,7 +171,7 @@ class Player2Bullet(pygame.sprite.Sprite):
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
-pygame.display.set_caption('SuperUltraKonstatineAlexandrovichShooterProMaxInsaneUnimaginableOutOfThisWorld Game')
+pygame.display.set_caption('SuperUltraKonstatineAlexandrovichShooterProMaxInsaneUnimaginableOutOfThisWorldGame')
 pygame.display.set_icon(pygame.image.load('res/icon.svg'))
 
 # Textures
@@ -216,7 +216,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_l and (game != 0 or game != 3 or game != 2 or game != 4):
+            if event.key == pygame.K_h and (game != 0 or game != 3 or game != 2 or game != 4):
                 player.shoot()
             if event.key == pygame.K_e  and (game != 0 or game != 3 or game != 2 or game != 4):
                 player2.shoot()
@@ -264,7 +264,7 @@ while run:
         text(window, 'Start <N>', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2)
         text(window, 'Quit <Q>', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
         text(window, 'Version 1.0', 20, LIGHTGRAY, 'Arial', 540, 580)
-        text(window, 'Made by: Lev(levs16), Semen(Sgk4, Yes)', 20, LIGHTGRAY, 'Arial', 185, 580)
+        text(window, 'Made by: Lev(levs16), Semyon(Sgk4, Yes)', 20, LIGHTGRAY, 'Arial', 185, 580)
         pygame.display.update()
 
     if game == 1:
