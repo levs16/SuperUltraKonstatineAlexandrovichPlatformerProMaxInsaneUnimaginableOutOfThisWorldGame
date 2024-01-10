@@ -1,11 +1,11 @@
 import pygame
 
-# window settings
+# Window settings
 FPS = 60
 WIDTH = 600
 HEIGHT = 600
 
-# colors
+# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -30,7 +30,7 @@ YELLOWGREEN = (154, 205, 50)
 DARKGREEN = (0, 100, 0)
 INDIGO = (75, 0, 130)
 
-# text
+# Text
 def text(screen, text, size, color, textFont, x, y):
     fontName = pygame.font.match_font(textFont)
     font = pygame.font.Font(fontName, size)
@@ -39,7 +39,7 @@ def text(screen, text, size, color, textFont, x, y):
     textRect.center = (x, y)
     screen.blit(textSurf, textRect)
 
-# player 1 :)
+# Player1 (with a smiley-face)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -83,11 +83,11 @@ class Player(pygame.sprite.Sprite):
         pygame.mixer.music.set_volume(1)
         pygame.mixer.music.play(loops=0)
 
-        bullet = bulletP1(self.rect.centerx, self.rect.centery)
+        bullet = Player1Bullet(self.rect.centerx, self.rect.centery)
         sprites.add(bullet)
         bulletsPlayer1.add(bullet)
 
-# player 2 :(
+# Player2(a frowney-faced)
 class Player2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -133,12 +133,12 @@ class Player2(pygame.sprite.Sprite):
         pygame.mixer.music.set_volume(1)
         pygame.mixer.music.play(loops=0)
 
-        bullet = bulletP2(self.rect.centerx, self.rect.centery)
+        bullet = Player2Bullet(self.rect.centerx, self.rect.centery)
         sprites.add(bullet)
         bulletsPlayer2.add(bullet)
 
-# bullet player 1
-class bulletP1(pygame.sprite.Sprite):
+# Player1's bullet
+class Player1Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(p1b, (10, 5))
@@ -152,8 +152,8 @@ class bulletP1(pygame.sprite.Sprite):
         if self.rect.x < 0:
             self.kill()
 
-# bullet player 2
-class bulletP2(pygame.sprite.Sprite):
+# Player2's bullet
+class Player2Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(p2b, (10, 5))
@@ -167,26 +167,26 @@ class bulletP2(pygame.sprite.Sprite):
         if self.rect.x > WIDTH:
             self.kill()
 
-# window design
+# Window design
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 pygame.display.set_caption('Supermegaultragood game')
 pygame.display.set_icon(pygame.image.load('res/icon.svg'))
 
-# textures
+# Textures
 background = pygame.image.load('res/bg.png').convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 background_rect = background.get_rect()
-bgsc0 = pygame.image.load('res/game0.jpeg').convert()
-bgsc0 = pygame.transform.scale(bgsc0, (WIDTH, HEIGHT))
-bgsc0_rect = bgsc0.get_rect()
-menuESCbg = pygame.image.load('res/menuESC.jpeg').convert()
-menuESCbg = pygame.transform.scale(menuESCbg, (WIDTH, HEIGHT))
-menuESCbg_rect = menuESCbg.get_rect()
-endbg = pygame.image.load('res/endbg.jpeg').convert()
-endbg = pygame.transform.scale(endbg, (WIDTH, HEIGHT))
-endbg_rect = endbg.get_rect()
+backgroundImgState0 = pygame.image.load('res/game0.jpeg').convert()
+backgroundImgState0 = pygame.transform.scale(backgroundImgState0, (WIDTH, HEIGHT))
+backgroundImgState0_rect = backgroundImgState0.get_rect()
+BackgroundImageState4 = pygame.image.load('res/menuESC.jpeg').convert()
+BackgroundImageState4 = pygame.transform.scale(BackgroundImageState4, (WIDTH, HEIGHT))
+BackgroundImageState4_rect = BackgroundImageState4.get_rect()
+backgroundImgGameOver = pygame.image.load('res/endbg.jpeg').convert()
+backgroundImgGameOver = pygame.transform.scale(backgroundImgGameOver, (WIDTH, HEIGHT))
+backgroundImgGameOver_rect = backgroundImgGameOver.get_rect()
 mainbg = pygame.image.load('res/mainbg.jpeg').convert()
 mainbg = pygame.transform.scale(mainbg, (WIDTH, HEIGHT))
 mainbg_rect = mainbg.get_rect()
@@ -252,18 +252,18 @@ while run:
         pygame.mixer.music.play()
 
 
-    # bullet hit counter
+    # Bullet Hit Counter
     if s1 == 10:
         game = 3
     if s2 == 10:
         game = 2
 
-    # drawing graphics
+    # Rendering
     if game == 0:
         window.blit(mainbg, mainbg_rect)
-        text(window, '|Start |N|', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2)
-        text(window, '|Exit to desktop |Q|', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
-        text(window, 'Version 0.8.2', 20, LIGHTGRAY, 'Arial', 540, 580)
+        text(window, 'Start <N>', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2)
+        text(window, 'Quit <Q>', 40, GRAY, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
+        text(window, 'Version 1.0', 20, LIGHTGRAY, 'Arial', 540, 580)
         text(window, 'Made by: Lev(levs16), Semen(Sgk4, Yes)', 20, LIGHTGRAY, 'Arial', 185, 580)
         pygame.display.update()
 
@@ -274,26 +274,26 @@ while run:
         sprites.update()
         enemies.draw(window)
         enemies.update()
-        text(window, str(s1), 30, SKYBLUE, 'Arial', 150, 100)
-        text(window, str(s2), 30, SKYBLUE, 'Arial', 450, 100)
+        text(window, str(s1), 30, SKYBLUE, 'Arial', 450, 100)
+        text(window, str(s2), 30, SKYBLUE, 'Arial', 150, 100)
         pygame.display.update()
     if game == 3:
-        window.blit(endbg, endbg_rect)
-        text(window, 'The end!', 72, RED, 'Arial', WIDTH // 2, HEIGHT // 2)
+        window.blit(backgroundImgGameOver, backgroundImgGameOver_rect)
+        text(window, 'Game Over!', 72, RED, 'Arial', WIDTH // 2, HEIGHT // 2)
         text(window, 'Player 1 is dead!', 40, RED, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
         pygame.display.update()
     if game == 2:
-        window.blit(endbg, endbg_rect)
-        text(window, 'The end!', 72, RED, 'Arial', WIDTH // 2, HEIGHT // 2)
+        window.blit(backgroundImgGameOver, backgroundImgGameOver_rect)
+        text(window, 'Game Over!', 72, RED, 'Arial', WIDTH // 2, HEIGHT // 2)
         text(window, 'Player 2 is dead!', 40, RED, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
         pygame.display.update()
     if game == 4:
-        window.blit(menuESCbg, menuESCbg_rect)
-        text(window, '==PAUSE==', 80, VIOLET, 'Arial', WIDTH // 2, HEIGHT // 2 - 100)
-        text(window, '|Continue |C|', 40, INDIGO, 'Arial', WIDTH // 2, HEIGHT // 2)
-        text(window, '|Exit to main menu |M|', 40, INDIGO, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
-        text(window, '|Exit to desktop|Q|', 40, INDIGO, 'Arial', WIDTH // 2, HEIGHT // 2 + 100)
+        window.blit(BackgroundImageState4, BackgroundImageState4_rect)
+        text(window, 'Pause', 80, VIOLET, 'Arial', WIDTH // 2, HEIGHT // 2 - 100)
+        text(window, 'Continue <C>', 40, INDIGO, 'Arial', WIDTH // 2, HEIGHT // 2)
+        text(window, 'Main Menu <M>', 40, INDIGO, 'Arial', WIDTH // 2, HEIGHT // 2 + 50)
+        text(window, 'Quit <Q>', 40, INDIGO, 'Arial', WIDTH // 2, HEIGHT // 2 + 100)
         pygame.display.update()
 
 pygame.quit()
-# V0.8.2
+# V1.0
