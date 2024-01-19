@@ -6,7 +6,7 @@ pygame.init()
 WIDTH = 1000
 HEIGHT = 1000
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
-pygame.display.set_caption('UltraCHESS v. 0.8.1')
+pygame.display.set_caption('UltraCHESS v. 0.9release')
 font = pygame.font.Font('res/Pix.ttf', 20)
 medium_font = pygame.font.Font('res/Pix.ttf', 40)
 big_font = pygame.font.Font('res/Pix.ttf', 50)
@@ -100,7 +100,7 @@ def draw_board():
         for i in range(9):
             pygame.draw.line(screen, 'black', (0, 100 * i), (800, 100 * i), 2)
             pygame.draw.line(screen, 'black', (100 * i, 0), (100 * i, 800), 2)
-        screen.blit(medium_font.render('Surrender', True, 'black'), (810, 830))
+        screen.blit(medium_font.render('Give Up', True, 'black'), (810, 830))
 
 
 # Piece-drawing function
