@@ -91,22 +91,22 @@ def draw_board():
         column = i % 4
         row = i // 4
         if row % 2 == 0:
-            pygame.draw.rect(screen, 'light gray', [
+            pygame.draw.rect(screen, (32, 32, 32), [
                              600 - (column * 200), row * 100, 100, 100])
         else:
-            pygame.draw.rect(screen, 'light gray', [
+            pygame.draw.rect(screen, (32, 32, 32), [
                              700 - (column * 200), row * 100, 100, 100])
-        pygame.draw.rect(screen, 'gray', [0, 800, WIDTH, 100])
-        pygame.draw.rect(screen, 'gold', [0, 800, WIDTH, 100], 5)
-        pygame.draw.rect(screen, 'gold', [800, 0, 200, HEIGHT], 5)
-        status_text = ['Current Move: Whites', 'Make your move, White',
-                       'Current Move: Blacks', 'Make your move, Black']
+        pygame.draw.rect(screen, (48, 48, 48), [0, 800, WIDTH, 100])
+        pygame.draw.rect(screen, (255, 255, 255), [0, 800, WIDTH, 100], 5)
+        pygame.draw.rect(screen, (255, 255, 255), [800, 0, 200, HEIGHT], 5)
+        status_text = ['Current Move: White', 'Make your move, White',
+                       'Current Move: Black', 'Make your move, Black']
         screen.blit(big_font.render(
             status_text[turn_step], True, 'black'), (20, 820))
         for i in range(9):
             pygame.draw.line(screen, 'black', (0, 100 * i), (800, 100 * i), 2)
             pygame.draw.line(screen, 'black', (100 * i, 0), (100 * i, 800), 2)
-        screen.blit(medium_font.render('FORFEIT', True, 'black'), (810, 830))
+        screen.blit(medium_font.render('Surrender', True, 'black'), (810, 830))
 
 
 # Piece-drawing function
