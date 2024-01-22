@@ -6,21 +6,24 @@ pygame.init()
 WIDTH = 1000
 HEIGHT = 1000
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
-pygame.display.set_caption('UltraCHESS v. 0.9release')
+pygame.display.set_caption('UltraCHESS')
 font = pygame.font.Font('res/Pix.ttf', 20)
 medium_font = pygame.font.Font('res/Pix.ttf', 40)
 big_font = pygame.font.Font('res/Pix.ttf', 50)
+start_screen_font = pygame.font.Font('res/Pix.ttf', 100)
 timer = pygame.time.Clock()
 fps = 60
+
 # Game variables
-white = ['rook', 'knight', 'bishop', 'king', 'queen', 'bishop', 'knight', 'rook',
+white = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook',
                 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
 whiteCoords = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0),
                    (0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1)]
-black = ['rook', 'knight', 'bishop', 'king', 'queen', 'bishop', 'knight', 'rook',
+black = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook',
                 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
 blackCoords = [(0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7),
                    (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6)]
+
 acquiredWhite = []
 acquiredBlack = []
 step = 0 # 0: white(no sel); 1:white turn(sel. piece); 2: black turn(no sel), 3: black turn(sel. piece)
@@ -28,6 +31,7 @@ selection = 100
 valid_moves = []
 
 # Load images for pieces(sprites), initialise em
+# Pieces defined like this: "{first letter of color}_{piece name}"
 b_queen = pygame.image.load('res/images/b_queen.png')
 b_queen = pygame.transform.scale(b_queen, (80, 80))
 b_queen_small = pygame.transform.scale(b_queen, (45, 45))
@@ -96,11 +100,11 @@ def draw_board():
         status_text = ['Current Move: White', 'Make your move, White',
                        'Current Move: Black', 'Make your move, Black']
         screen.blit(big_font.render(
-            status_text[step], True, 'black'), (20, 820))
+            status_text[step], True, 'white'), (20, 820))
         for i in range(9):
             pygame.draw.line(screen, 'black', (0, 100 * i), (800, 100 * i), 2)
             pygame.draw.line(screen, 'black', (100 * i, 0), (100 * i, 800), 2)
-        screen.blit(medium_font.render('Give Up', True, 'black'), (810, 830))
+        screen.blit(medium_font.render('Give Up', True, 'red'), (810, 830))
 
 
 # Piece-drawing function
@@ -366,7 +370,36 @@ def draw_game_over():
                 True, 'white'), (210, 240))
 
 
-# Main loop
+start_menu = True
+start_button_rect = pygame.Rect(300, 400, 400, 100)
+quit_button_rect = pygame.Rect(300, 550, 400, 100)
+
+while start_menu:
+    screen.fill((32, 32, 32))
+
+    pygame.draw.rect(screen, (0, 255, 0), start_button_rect)
+    pygame.draw.rect(screen, (255, 0, 0), quit_button_rect)
+
+    screen.blit(start_screen_font.render("UltraCHESS", True, 'gray'), (220, 150))
+    screen.blit(medium_font.render("created by Yes & levs16", True, 'gray'), (276, 680))
+    screen.blit(medium_font.render("version 1.1.3", True, 'gray'), (402, 720))
+    screen.blit(medium_font.render("Start Game", True, 'dark green'), (376, 430))
+    screen.blit(medium_font.render("Quit", True, 'dark red'), (460, 580))
+
+    pygame.display.flip()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            start_menu = False
+            exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if start_button_rect.collidepoint(event.pos):
+                start_menu = False
+            elif quit_button_rect.collidepoint(event.pos):
+                start_menu = False
+                exit()
+
+# Main game loop
 black_options = check_options(black, blackCoords, 'black')
 white_options = check_options(white, whiteCoords, 'white')
 run = True
@@ -441,14 +474,14 @@ while run:
             if event.key == pygame.K_RETURN:
                 game_over = False
                 winner = ''
-                white = ['rook', 'knight', 'bishop', 'king', 'queen', 'bishop', 'knight', 'rook',
+                white = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook',
                                 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
                 whiteCoords = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0),
-                                   (0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1)]
-                black = ['rook', 'knight', 'bishop', 'king', 'queen', 'bishop', 'knight', 'rook',
+                                (0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1)]
+                black = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook',
                                 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn', 'pawn']
                 blackCoords = [(0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (7, 7),
-                                   (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6)]
+                                (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (7, 6)]
                 acquiredWhite = []
                 acquiredBlack = []
                 step = 0
@@ -464,6 +497,5 @@ while run:
         draw_game_over()
 
     pygame.display.flip()
-
 
 pygame.quit()
